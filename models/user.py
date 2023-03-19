@@ -17,3 +17,6 @@ class User(BaseModel):
     
     '''represent a relationship with the class Place. If the User object is deleted, all linked Place objects must be automatically deleted'''
     places = relationship("Place", cascade="all, delete", backref="user")
+
+     '''represent a relationship with the clasReview. If the User object is deleted, all linked Review objects must be automatically deleted'''
+     reviews = relationship('Review', cascade="all, delete", backref="user")

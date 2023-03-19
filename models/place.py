@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, Integer, Foreignkey, PrimaryKeyConstraint, Table
 from sqlalchemy.orm import relationship
 from models import storage
 
@@ -36,3 +36,9 @@ class Place(BaseModel):
             if review.place_id == self.id:
                 review_list.append(review)
         return review_list
+
+class PlaceAmenity(Base):
+    __tablename__ = 'place_amenity'
+    place_id = Column(String(60), ForeignKey('places.id'), primary_key=True, nullable=False)
+    amenity_id = Column(String(60), ForeignKey('amenities.id'), primary_key=True, nullable=False)
+    metadata = Base.metadata

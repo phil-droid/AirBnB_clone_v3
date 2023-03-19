@@ -15,3 +15,5 @@ class User(BaseModel):
     first_name = Column(String(128), nullable=False)
     last_name = Column(String(128), nullable=False)
     
+    '''represent a relationship with the class Place. If the User object is deleted, all linked Place objects must be automatically deleted'''
+    places = relationship("Place", cascade="all, delete", backref="user")

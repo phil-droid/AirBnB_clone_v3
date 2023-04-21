@@ -1,27 +1,26 @@
 #!/usr/bin/python
 """ holds class Place"""
-import models
 from models.base_model import BaseModel, Base
 from os import getenv
 import sqlalchemy
 from sqlalchemy import Column, String, Integer, Float, ForeignKey, Table
 from sqlalchemy.orm import relationship
 
-if models.storage_t == 'db':
-    place_amenity = Table('place_amenity', Base.metadata,
-                          Column('place_id', String(60),
-                                 ForeignKey('places.id', onupdate='CASCADE',
-                                            ondelete='CASCADE'),
-                                 primary_key=True),
-                          Column('amenity_id', String(60),
-                                 ForeignKey('amenities.id', onupdate='CASCADE',
-                                            ondelete='CASCADE'),
-                                 primary_key=True))
+
+place_amenity = Table('place_amenity', Base.metadata,
+                      Column('place_id', String(60),
+                             ForeignKey('places.id', onupdate='CASCADE',
+                                        ondelete='CASCADE'),
+                             primary_key=True),
+                      Column('amenity_id', String(60),
+                             ForeignKey('amenities.id', onupdate='CASCADE',
+                                        ondelete='CASCADE'),
+                             primary_key=True))
 
 
 class Place(BaseModel, Base):
     """Representation of Place """
-    if models.storage_t == 'db':
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         __tablename__ = 'places'
         city_id = Column(String(60), ForeignKey('cities.id'), nullable=False)
         user_id = Column(String(60), ForeignKey('users.id'), nullable=False)
@@ -54,7 +53,7 @@ class Place(BaseModel, Base):
         """initializes Place"""
         super().__init__(*args, **kwargs)
 
-    if models.storage_t != 'db':
+    if getenv('HBNB_TYPE_STORAGE') != 'db':
         @property
         def reviews(self):
             """getter attribute returns the list of Review instances"""
@@ -75,4 +74,4 @@ class Place(BaseModel, Base):
             for amenity in all_amenities.values():
                 if amenity.place_id == self.id:
                     amenity_list.append(amenity)
-            return 
+            return amenity_list

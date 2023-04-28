@@ -88,3 +88,27 @@ class DBStorage:
               for cls in self.__classes:
                   count += self.__session.query(cls).count()
               return count
+
+    def list_amenities_of_place(self, place_id):
+        """Retrieves the list of all Amenity objects of a Place"""
+        place = self.get(Place, place_id)
+        if not place:
+            return None
+        amenities = [amenity.to_dict() for amenity in place.amenities]
+        return amenities
+
+    def delete_amenity_from_place(self, place_id, amenity_id):
+        """Deletes a Amenity object to a Place"""
+        place = self.get(Place, place_id)
+        if not place:
+            return None
+        amenity = self.get(Amenity, amenity_id)
+        if not amenity:
+            return None
+        if amenity not in place.amenities:
+            return None
+        place.amenities.remove(amenity)
+        self.save()
+        return {}
+
+    def link_amenity_to_place

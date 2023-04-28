@@ -74,3 +74,17 @@ class DBStorage:
         session_factory = sessionmaker(bind=self.__engine, expire_on_commit=False)
         self.__session = scoped_session(session_factory)
 
+    def get(self, cls, id):
+        """Retrieve an object based on class name and ID"""
+        key = "{}.{}".format(cls.__name__, id)
+        return self.__session.query(cls).get(key)
+
+    def count(self, cls=None):
+         """Count the number of objects in storage"""
+         if cls:
+             return self.__session.query(cls).count()
+          else:
+              count = 0
+              for cls in self.__classes:
+                  count += self.__session.query(cls).count()
+              return count

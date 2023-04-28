@@ -55,3 +55,18 @@ class FileStorage:
                         self.all()[key] = classes[val['__class__']](**val)
         except FileNotFoundError:
             pass
+
+        def get(self, cls, id):
+            """Retrieve an object based on class name and ID"""
+            filename = "{}.{}".format(cls.__name__, id)
+            objects = self.all(cls)
+            return objects.get(filename)
+
+        def count(self, cls=None):
+            """Count the number of objects in storage"""
+            if cls:
+                objects = self.all(cls)
+                return len(objects)
+            else:
+                objects = self.all()
+                return len(objects)

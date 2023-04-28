@@ -1,4 +1,6 @@
-from flask import Flask
+#!/usr/bin/python3
+
+from flask import Flask, jsonify
 from api.v1.views import app_views
 from models import storage
 
@@ -10,6 +12,10 @@ app.register_blueprint(app_views)
 def teardown_appcontext(exception):
     """Removes the current SQLAlchemy session."""
     storage.close()
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({'error': 'Not found'}), 404
 
 if __name__ == "__main__":
     host = os.getenv('HBNB_API_HOST', '0.0.0.0')
